@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './style.category.css'
 import { Button } from '@mui/material';
+import { Category } from "../../../backend/src/category/category.schema"
 const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   

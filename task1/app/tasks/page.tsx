@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { useState } from 'react';
 
-const page = () => {
+const TaskPage = () => {
   return (
     <div>
-      tasks
+      Hello New Task Enter here!
     </div>
   )
 }
 
-export default page
+export default TaskPage;
