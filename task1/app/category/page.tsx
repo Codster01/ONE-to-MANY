@@ -51,17 +51,29 @@ const CategoryPage = () => {
   const columns: ColumnDef<Category>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Name
+        </div>
+      ),
       cell: info => info.getValue(),
     },
     {
       accessorKey: 'description',
-      header: 'Description',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Description
+        </div>
+      ),
       cell: info => info.getValue(),
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Actions
+        </div>
+      ),
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <Button onClick={() => deleteit(row.original._id)}>
@@ -76,7 +88,7 @@ const CategoryPage = () => {
       ),
     },
   ];
-
+  
 
   return (
     <div className='m-6'>

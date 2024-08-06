@@ -50,18 +50,26 @@ function TaskList() {
   const columns: ColumnDef<Task>[] = [
     {
       accessorKey: 'title',
-      header: 'Task title',
-      cell: ({row}) => (
+      header: () => (
+        <div className='font-bold text-lg'>
+          Task title
+        </div>
+      ),
+      cell: ({ row }) => (
         <div>
           <a onClick={() => handleViewDetails(row.original._id)} style={{ cursor: 'pointer' }}>
-              {row.original.title}
-            </a>
+            {row.original.title}
+          </a>
         </div>
       ),
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Actions
+        </div>
+      ),
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <Button onClick={() => handleDelete(row.original._id)}>
@@ -76,7 +84,7 @@ function TaskList() {
       ),
     },
   ];
-
+  
   return (
       <div className="m-6">
       <div className="flex justify-between items-center h-16">

@@ -36,22 +36,31 @@ function ProjectList() {
   
   const columns: ColumnDef<Project>[] = [
     {
-      accessorKey:'name',
-      header:'Project name',
-      cell : info => info.getValue()
+      accessorKey: 'name',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Project name
+        </div>
+      ),
+      cell: info => info.getValue()
     },
     {
-      id:'delete',
-      header:'Delete',
-      cell: ({row}) => (
+      id: 'delete',
+      header: () => (
+        <div className='font-bold text-lg'>
+          Delete
+        </div>
+      ),
+      cell: ({ row }) => (
         <div>
           <Button onClick={() => handleDelete(row.original._id)}>
-                <DeleteIcon sx={{ color: 'red' }} />
-              </Button>
+            <DeleteIcon sx={{ color: 'red' }} />
+          </Button>
         </div>
       )
     }
-  ] 
+  ];
+  
   return (
 
     <div className="m-6">
