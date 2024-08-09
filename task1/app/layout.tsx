@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ButtonAppBar from "@/components/ui/ButtonAppBar";
-
+import NextTopLoader from 'nextjs-toploader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Providers from "@/components/ui/Providers";
+import SignInButton from "@/components/ui/SignInButton";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,10 +20,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    
+
     <html lang="en">
       <body className={inter.className}>
+        <Providers>
+
+      
       <ButtonAppBar />
+      <ToastContainer />
+        <NextTopLoader color="#fff" />
+       
+        </Providers>
         {children}</body>
     </html>
+   
   );
 }

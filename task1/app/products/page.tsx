@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './style.category.css'
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import DeleteIcon from '@mui/icons-material/Delete';

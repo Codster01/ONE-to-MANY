@@ -57,9 +57,11 @@ export class UserService {
         }
 
         const token = this.jwtService.sign({userId: chk_user._id})
-
+        const userRole = chk_user.role;
 
         return {
+            name: chk_user.name, // Assuming 'name' is a field in chk_user
+            userRole: userRole,
             token: token,
         }
 

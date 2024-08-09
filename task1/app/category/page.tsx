@@ -1,5 +1,3 @@
-// pages/categories/index.js
-
 "use client";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -9,6 +7,8 @@ import Link from 'next/link';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Category } from '../../../backend/src/category/category.schema';
+import { ColumnDef } from '@tanstack/react-table';
+import { DataTable } from '@/components/ui/datatabble';
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -46,32 +46,45 @@ const CategoryPage = () => {
     fetchCategories();
   }, []);
 
+  const columns: ColumnDef<Category>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: info => info.getValue(),
+    },
+    {
+      accessorKey: 'description',
+      header: 'Description',
+      cell: info => info.getValue(),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Button onClick={() => deleteit(row.original._id)}>
+            <DeleteIcon sx={{ color: 'red' }} />
+          </Button>
+          <Link href={`/category/edit/${row.original._id}`}>
+            <Button>
+              <EditIcon sx={{ color: 'blue' }} />
+            </Button>
+          </Link>
+        </div>
+      ),
+    },
+  ];
+
+
   return (
-    <div className="mt-10 container mx-auto p-6 bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 ease-in-out">
+    <div className='m-6'>
       <div className='flex justify-between items-center h-16 m-4'>
         <h1 className='text-3xl font-bold text-primary'>Categories</h1>
         <Link href="/category/add">
-          <Button className='btn-add' onClick={add}>+ Add new categories</Button>
+          <Button className='btn-add text-xs' onClick={add}>+ Add new categories</Button>
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {categories.map(category => (
-          <div key={category.id} className="flex space-around relative card bg-slate-100 shadow-md rounded-lg p-4 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-            <Button onClick={() => { deleteit(category._id) }} className="absolute top-0 right-0 mt-1 mr-1 ">
-              <DeleteIcon sx={{ color: 'red' }} />
-            </Button>
-            <Link href={`/category/edit/${category._id}`}>
-              <Button className="absolute top-0 left-0 mt-1 ml-1  ">
-                <EditIcon sx={{ color: 'blue' }} />
-              </Button>
-            </Link>
-            <div className='flex-col justify-center items-center w-80 m-auto'>
-              <h2 className='font-semibold text-blue-500 text-2xl m-3 '>{category.name}</h2>
-              <p className='text-blue-900'>{category.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <DataTable columns={columns} data={categories} />
     </div>
   );
 };
