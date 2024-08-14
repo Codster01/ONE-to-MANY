@@ -45,6 +45,7 @@ export class CategoryController {
     return this.categoryService.getCategories();
   }
   @Get("/api/:id")
+  @UseGuards(AuthGuard)
   @ApiOperation({summary:'Get Category by ID'})
   @ApiResponse({
     status: 200,

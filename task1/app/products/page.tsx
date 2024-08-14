@@ -10,9 +10,8 @@ import { Category } from '../../../backend/src/category/category.schema';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import withProtectedRoute from '../../lib/withProtectedRoute';
+import EditIcon from '@mui/icons-material/Edit';
 import { useSession } from "next-auth/react";
-import EditIcon from "@mui/icons-material/Edit";
-
 const ProductPage = () => {
   const [products, setProducts] = useState<Category[]>([]);
   const router = useRouter();
@@ -23,6 +22,7 @@ const ProductPage = () => {
     Authorization: `Bearer ${token}`,
 };
   const add = () => {
+
     console.log('Add Product');
   }
 
@@ -61,21 +61,36 @@ const ProductPage = () => {
       <div className='flex justify-between items-center mt-3 mb-10'>
         <h1 className='text-5xl text-center text-primary font-bold '>Products</h1>
         {permissions?.create && (
-          <Link href="/tasks/create">
-            <Button className="btn-add text-xs bg-primary text-blue-100">+ Add new Products</Button>
-          </Link>
-        )}      </div>
+          <Link href="/products/add"><Button className='btn-add p-3 text-lg bg-primary text-white hover:bg-blue-100 hover:text-blue-950 border rounded-lg' onClick={add}>+ Add Product</Button></Link>
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-6">
         {products.map(product => (
           <div key={product.id} className="card relative bg-slate-100 bg-white shadow-md rounded-lg p-4 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-            <Button onClick={() => {deleteit(product._id)}} className="absolute bottom-0 right-0 mb-2 mr-2">
-              <DeleteIcon sx={{ color: 'red' }} />
-            </Button>
+         
             <img className="image-container h-48 w-full flex items-center justify-center bg-gray-200"
- src={product.bannerImage} alt={product.name} />
+            src={product.bannerImage} alt={product.name} />
             <h2 className='font-bold text-blue-900 text-2xl m-5'>{product.name}</h2>
             <h3 className='font-semibold text-blue-500 text-lg m-1'>Category: {product.category}</h3>
             <p className='text-blue-900'>Description: {product.description}</p>
+            <div className="flex flex-row justify-between	gap-5 mt-3">
+          <div className="div1">
+
+            <Button onClick={() => {deleteit(product._id)}} className="">
+              <DeleteIcon sx={{ color: 'red' }} />
+            </Button>
+          </div>
+          <div className="div2">
+            {permissions?.write && (
+          <Link href={`/products/edit/${product._id}`}>
+            <Button className="">
+              <EditIcon sx={{ color: 'blue' }} />
+            </Button>
+            </Link>
+            ) }
+          </div>
+           
+           </div>
           </div>
         ))}
       </div>
@@ -84,4 +99,4 @@ const ProductPage = () => {
   );
 };
 
-export default withProtectedRoute(ProductPage, ['admin', 'user']);
+export default withProtectedRoute(ProductPage, ['admin', 'user']);

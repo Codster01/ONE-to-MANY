@@ -121,4 +121,73 @@ export class ProductController {
   }
     return await this.productService.deleteProduct(id);
   }
+  @Put('/api/update/:id')
+  @UseGuards(AuthGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Update a product by ID' })
+  @ApiResponse({
+  status: 200,
+  description: 'Product successfully updated',
+  schema: {
+    example: {
+      id: '123',
+      name: 'Updated Product',
+      description: 'Updated Product Description',
+      price: 150,
+      bannerImage: 'uploads/bannerImage-987654321.jpg',
+    },
+  },
+})
+@ApiResponse({
+  status: 400,
+  description: 'Invalid input',
+})
+@UseInterceptors(FileInterceptor('bannerImage'))
+async updateProduct(
+  @Request() req, 
+  @Param('id') id: string,
+  @Body() updateProductDto: any,
+  @UploadedFile() file: Express.Multer.File,
+): Promise<Product> {
+  let imagePath = updateProductDto.bannerImage;
+
+  if (!req.user.permissions.write) {
+    throw new ForbiddenException('You do not have permission to update tasks.');
+  } 
+  if (file) {
+    const result = await this.cloudinaryService.uploadImage(file);
+    imagePath = result.secure_url; // Get the secure URL from Cloudinary response
+  }
+  return await this.productService.updateProduct(id, updateProductDto, imagePath);
 }
+@Get('/api/get/:id')
+@UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get a product by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get a product by ID',
+    schema: {
+      example: {
+        id: '123',
+        name: 'Product Name',
+        description: 'Product Description',
+        Sellingprice: 100,
+        Actualprice: 50,
+        Tags: ['user1', 'user2'],
+        category: 'Obj584515487',
+        bannerImage: 'uploads/bannerImage-123456789.jpg',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Product not found',
+  })
+  getProduct(@Param('id') id: string, @Request() req): Promise<Product> {
+    if (!req.user.permissions.read) {
+      throw new ForbiddenException('You do not have the permission to read the tasks.');
+  }
+    return this.productService.findOne(id);
+  }
+}
+
