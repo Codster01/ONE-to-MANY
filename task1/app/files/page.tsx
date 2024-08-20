@@ -50,9 +50,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //   });
     } catch (error) {
       console.error('Error extracting text:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error details:', error.response?.data);
-      }
+      
       
     } finally {
       setIsLoading(false);

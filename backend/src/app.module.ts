@@ -22,6 +22,8 @@ import { JWT_KEY } from './constant';
 
 import { RolesModule } from './roles/roles.module';
 import { NotificationModule } from './notification/notification.module';
+import { FileModule } from './file/file.module';
+// import { EdgeStoreModule } from './edgestore/edgestore.module';
 
 
 @Module({
@@ -31,7 +33,7 @@ import { NotificationModule } from './notification/notification.module';
     signOptions: {
       expiresIn: '30d'
     }
-  }), RolesModule, NotificationModule,],
+  }), RolesModule, NotificationModule, FileModule],
   controllers: [AppController],
   providers: [AppService],
 })
