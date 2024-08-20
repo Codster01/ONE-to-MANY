@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { getParticularProject, updateProject } from '@/utils/api';
 import axios from 'axios';
 import { useSession } from "next-auth/react";
+import Layout from '@/components/ui/Layout';
 
 // import { Project } from '../../../../../backend/src/project/project.schema';
 
@@ -75,6 +76,7 @@ function UpdateProject() {
 
 
   return (
+    <Layout>
     <div>
       <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold">Edit Category</h1>
@@ -96,6 +98,7 @@ function UpdateProject() {
       </form>
     </div>
     </div>
+    </Layout>
   )
 }
 

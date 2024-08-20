@@ -24,4 +24,8 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   sendNotificationToUser(userId: string, notification: any) {
     this.server.to(userId).emit('notification', notification);
   }
+
+  sendUnreadCountToUser(userId: string, unreadCount: number) {
+    this.server.to(userId).emit('unreadCount', unreadCount);
+  }
 }

@@ -60,8 +60,8 @@ function TaskList() {
 
   useEffect(() => {
     const socket = io("http://localhost:3002"); // Replace with your server URL
-
     socket.on("taskAssigned", (newTask) => {
+      console.log('This is the new task assigned');
       setTasks((prevTasks) => [...prevTasks, newTask]);
       showToast(`New task assigned: ${newTask.title}`, "success");
     });

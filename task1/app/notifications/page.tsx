@@ -8,11 +8,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button
 } from "@mui/material";
-
+import io from "socket.io-client";
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const { data: session } = useSession();
-
+  const [tasks, setTasks] = useState([]);
+  const [toast, setToast] = useState({
+    message: "",
+    type: "info",
+    show: false,
+  });
+  const showToast = (message, type) => {
+    setToast({ message, type, show: true });
+  };
   useEffect(() => {
     if (session?.user?.token) {
       fetchNotifications();
@@ -31,6 +39,19 @@ export default function Notifications() {
     }
   };
 
+  useEffect(() => {
+    const socket = io("http://localhost:3002"); // Replace with your server URL
+    
+    socket.on("taskAssigned", (data) => {
+      console.log(socket);
+      console.log("New task assigned:", data);
+      showToast("New task assigned success", 'success');
+    });
+  
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   const markAsRead = async (notificationId) => {
     try {
       await axios.patch(`http://localhost:3002/notifications/${notificationId}/read`, {}, {

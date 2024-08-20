@@ -8,7 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Bell } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+import io from "socket.io-client";
 export default function Navbar() {
   const { data: session } = useSession();
   const userRole = session?.user.role;
@@ -22,13 +22,51 @@ export default function Navbar() {
   const category = () => console.log("Category clicked");
   const products = () => console.log("Products clicked");
   const projects = () => console.log("Projects clicked");
-  const tasks = () => console.log("Tasks clicked");
+  // const tasks = () => console.log("Tasks clicked");
+  const [tasks, setTasks] = useState([]);
+  const [toast, setToast] = useState({
+    message: "",
+    type: "info",
+    show: false,
+  });
+  const showToast = (message, type) => {
+    setToast({ message, type, show: true });
+  };
 
   useEffect(() => {
     if (session?.user?.token) {
       fetchUnreadCount();
     }
   }, [session]);
+
+
+  useEffect(() => {
+    const socket = io("http://localhost:3002", {
+      query: { userId: "yourUserId" } // Replace with the actual user ID
+    });
+  
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.connected); // Should log true
+    });
+  
+    socket.on("connect_error", (error) => {
+      console.error("Connection error:", error);
+    });
+  
+    socket.on("taskAssigned", (data) => {
+      console.log("New task assigned:", data);
+      showToast("New task assigned success", 'success');
+    });
+  
+    socket.on("unreadCount", (count) => {
+      console.log("Unread count:", count);
+      // Update your state or UI with the new unread count
+    });
+  
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   const fetchUnreadCount = useCallback(async () => {
     if (session?.user?.token) {
       try {

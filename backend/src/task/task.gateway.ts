@@ -35,7 +35,14 @@ export class TaskGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.server.emit('taskDeleted', taskId);
   }
 
+  // emitNotification(userId: string, notification: any) {
+  //   this.server.to(userId).emit('notification', notification);
+  // }
   emitNotification(userId: string, notification: any) {
-    this.server.to(userId).emit('notification', notification);
-  }
+    if (userId === 'all') {
+        this.server.emit('notification', notification);
+    } else {
+        this.server.to(userId).emit('notification', notification);
+    }
+}
 }
